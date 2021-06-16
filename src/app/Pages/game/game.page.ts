@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Question } from '../../models/question';
 import { OpenTriviaService } from '../../services/open-trivia.service';
-import { ToastController } from '@ionic/angular';
-
+import { ToastService } from '../../utils/toast.service';
 
 
 
@@ -30,8 +29,8 @@ export class GamePage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private openTriviaService: OpenTriviaService,
-    private toastController: ToastController,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService,
     ) {
     this.route.params.subscribe((params) => {
         this.pseudo = params['pseudo'];
@@ -48,15 +47,6 @@ export class GamePage implements OnInit {
       this.questions = res;
       this.setQuestion();
     })
-  }
-
-
-  async presentToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      color: color    });
-    toast.present();
   }
 
 
@@ -98,7 +88,7 @@ export class GamePage implements OnInit {
       }
     } 
     else if (!this.answered) {
-      this.presentToast('Veuillez choisir une réponse !', 'danger');
+      this.toastService.presentToast('Veuillez choisir une réponse !', 'danger');
     }
    
 

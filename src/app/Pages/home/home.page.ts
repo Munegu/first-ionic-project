@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ToastService } from '../../utils/toast.service';
-import { OpenTriviaService } from '../../services/open-trivia.service';
 import { Router } from '@angular/router';
 
 
@@ -18,7 +17,6 @@ export class HomePage {
   pseudo : string = '';
 
   constructor(
-    private openTriviaService: OpenTriviaService,
     private toastService: ToastService,
     private router: Router
     ) {}
