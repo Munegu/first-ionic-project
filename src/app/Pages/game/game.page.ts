@@ -1,22 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Question } from '../../models/question';
+import { OpenTriviaService } from '../../services/open-trivia.service';
 import { ToastController } from '@ionic/angular';
-import { OpenTriviaService } from '../open-trivia.service';
-import { Question } from '../question';
+
 
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-game',
+  templateUrl: './game.page.html',
+  styleUrls: ['./game.page.scss'],
 })
-export class HomePage {
+export class GamePage implements OnInit {
 
-  difficulty: Array<string> = ['Easy','Medium','Hard'];
-  difficultyChoice: string = '';
-  save: boolean = false;
   pseudo : string = '';
-  valid: boolean = false;
+  difficultyChoice: string = '';
   questions: Question[] = [];
   responses: string[] = [];
   currentQuestion: Question;
@@ -29,9 +28,28 @@ export class HomePage {
 
 
   constructor(
+    private route: ActivatedRoute,
+    private openTriviaService: OpenTriviaService,
     private toastController: ToastController,
-    private openTriviaService: OpenTriviaService
-    ) {}
+    private router: Router
+    ) {
+    this.route.params.subscribe((params) => {
+        this.pseudo = params['pseudo'];
+        this.difficultyChoice = params['difficulty'];
+    })
+   }
+
+   ngOnInit() {
+    this.end = false;
+    this.answered = false;
+    this.score = 0;
+    this.indexQuestion = 0;
+    this.openTriviaService.getQuestions(10, this.difficultyChoice).then(res => {
+      this.questions = res;
+      this.setQuestion();
+    })
+  }
+
 
   async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
@@ -42,26 +60,7 @@ export class HomePage {
   }
 
 
-
-  async startQuiz ()   {
-
-    this.end = false;
-    this.answered = false;
-    this.score = 0;
-    this.indexQuestion = 0;
-
-    if (0 === this.difficultyChoice.trim().length || 3 > this.pseudo.trim().length){
-      this.presentToast('Veuillez renseignez un pseudo (3 caractères min) et choisir une difficulté', 'danger');
-    }else {
-      this.valid = true;
-        await this.openTriviaService.getQuestions(10, this.difficultyChoice).then(res => {
-          this.questions = res;
-          this.setQuestion();
-        })
-    }
-  }
-
-  async setQuestion (): Promise<void> {
+   async setQuestion (): Promise<void> {
     this.currentQuestion = this.questions[this.indexQuestion];
     this.responses = await this.openTriviaService.getAnswers(this.currentQuestion);
   }
@@ -84,6 +83,9 @@ export class HomePage {
       this.score++;
     }
       this.answered = true;
+    if (this.end) {
+        this.router.navigate(['/score', this.pseudo, this.randomUser, this.score]);
+      }
   }
 
   nextQuestion (): void {
@@ -101,6 +103,5 @@ export class HomePage {
    
 
   }
-
 
 }

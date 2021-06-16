@@ -1,0 +1,33 @@
+<ion-content [fullscreen]="true">
+<ion-header collapse="condense">
+  <ion-toolbar>
+    <ion-title size="large" class="ion-text-center">Score</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+  <ion-chip class="ion-margin-start ion-margin-top">
+    <ion-avatar>
+      <img [src]="randomUser">
+    </ion-avatar>
+    <ion-label>{{ pseudo }}</ion-label>
+  </ion-chip>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Votre score</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content *ngIf="5 < score">
+      Félicitations, vous avez marquez {{ score }} points !
+    </ion-card-content>
+
+    <ion-card-content *ngIf="5 >= score">
+      Dommage, vous n'avez marqué que {{ score }} points !
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button [routerLink]="['/home']" style="margin-top: 30px"  expand="full">Retour à l'accueil</ion-button>
+
+
+</ion-content>

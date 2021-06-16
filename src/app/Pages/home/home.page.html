@@ -1,0 +1,37 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large" class="ion-text-center">Open Trivia</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+
+    <ion-item>
+      <ion-label position="stacked">Votre pseudo</ion-label>
+      <ion-input type="text" [(ngModel)]="pseudo"></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label class="ion-text-justify">Difficulté</ion-label>
+      <ion-select [(ngModel)]="difficultyChoice">
+        <ion-select-option *ngFor="let item of difficulty" [value] = "item">{{ item }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+     <ion-item>
+
+      <ion-toggle [(ngModel)] = "save" style="margin-right: 30px"> </ion-toggle >
+       <label for="save" >Sauvegarder les informations</label>
+      
+     </ion-item>
+
+
+     <ion-button (click)="startQuiz()" style="margin-top: 30px"  expand="full">
+       Commencer
+     </ion-button>
+
+  </div>
+  </ion-content>
+
